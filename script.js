@@ -40,7 +40,9 @@ criarTabuleiro();
 btnIniciar.addEventListener("click", iniciarGame);
 
 function iniciarGame() {
+  corpoSnake.forEach((e) => e.classList.remove("snake"));
   corpoSnake = [];
+  direcaoAtual = null;
   // procura uma div no tabuleiro e a atribui a outra variável
   let divEncontrada = listaDeDivs.find(
     (element) => element.dataset.x === "6" && element.dataset.y === "6",
