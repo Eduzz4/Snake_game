@@ -2,9 +2,13 @@ const tabuleiro = document.querySelector(".tabuleiro-grid");
 const btnIniciar = document.querySelector(".iniciar-game");
 
 let totalDeCasas = 144;
+let listaDeDivs = [];
+let corpoSnake = [];
+let direcaoAtual = null;
+let loopJogo = null;
+let jogoComecou = false;
 
 function criarTabuleiro() {
-  let listaDeDivs = [];
   for (let i = 0; i < totalDeCasas; i++) {
     const celula = document.createElement("div");
     celula.classList.add("celula");
@@ -33,3 +37,54 @@ function enderecarGrid(div) {
 }
 
 criarTabuleiro();
+btnIniciar.addEventListener("click", iniciarGame);
+
+function iniciarGame() {
+  corpoSnake = [];
+  // procura uma div no tabuleiro e a atribui a outra variável
+  let divEncontrada = listaDeDivs.find(
+    (element) => element.dataset.x === "6" && element.dataset.y === "6",
+  );
+  corpoSnake.push(divEncontrada);
+  desenharSnake(corpoSnake);
+}
+
+function desenharSnake(snake) {
+  snake.forEach((element) => {
+    element.classList.add("snake");
+  });
+}
+
+window.addEventListener("keydown", (event) => {
+  if (event.key === "ArrowUp") direcaoAtual = "up";
+  if (event.key === "ArrowDown") direcaoAtual = "down";
+  if (event.key === "ArrowLeft") direcaoAtual = "left";
+  if (event.key === "ArrowRight") direcaoAtual = "right";
+
+  if (!jogoComecou) {
+    jogoComecou = true;
+    loopJogo = setInterval(movimentarSnake, 200);
+  }
+});
+
+function movimentarSnake() {
+  let posAtual = corpoSnake[0];
+  let posX = Number(posAtual.dataset.x);
+  let posY = Number(posAtual.dataset.y);
+
+  if (direcaoAtual === "up") posY -= 1;
+  if (direcaoAtual === "down") posY += 1;
+  if (direcaoAtual === "left") posX -= 1;
+  if (direcaoAtual === "right") posX += 1;
+
+  let proPos = listaDeDivs.find(
+    (element) =>
+      element.dataset.x === String(posX) && element.dataset.y === String(posY),
+  );
+
+  if (proPos) {
+    posAtual.classList.remove("snake");
+    corpoSnake = [proPos];
+    desenharSnake(corpoSnake);
+  }
+}
