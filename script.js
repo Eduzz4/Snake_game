@@ -8,6 +8,7 @@ let corpoSnake = [];
 let direcaoAtual = null;
 let loopJogo = null;
 let jogoComecou = false;
+let posComida;
 
 function criarTabuleiro() {
   for (let i = 0; i < totalDeCasas; i++) {
@@ -87,15 +88,20 @@ function movimentarSnake() {
   );
 
   if (proPos) {
-    posAtual.classList.remove("snake");
-    corpoSnake = [proPos];
+    corpoSnake.unshift(proPos);
     desenharSnake(corpoSnake);
+  } 
+
+  if(proPos === posComida) {
+    posComida.classList.remove("food");
+    criarComida();
+  } else {
+    let raboSnake = corpoSnake.pop();
+    raboSnake.classList.remove("snake");
   }
 }
 
 function criarComida() {
-  let posComida;
-
   do {
     let comidaX = Math.floor(Math.random() * divsPorLinha);
     let comidaY = Math.floor(Math.random() * divsPorLinha);
