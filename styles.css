@@ -56,3 +56,7 @@ header {
 .snake {
     background-color: #a855f7;
 }
+
+.food {
+  background-color:chartreuse;
+}

@@ -2,6 +2,7 @@ const tabuleiro = document.querySelector(".tabuleiro-grid");
 const btnIniciar = document.querySelector(".iniciar-game");
 
 let totalDeCasas = 144;
+let divsPorLinha = 12;
 let listaDeDivs = [];
 let corpoSnake = [];
 let direcaoAtual = null;
@@ -49,6 +50,7 @@ function iniciarGame() {
   );
   corpoSnake.push(divEncontrada);
   desenharSnake(corpoSnake);
+  criarComida();
 }
 
 function desenharSnake(snake) {
@@ -89,4 +91,21 @@ function movimentarSnake() {
     corpoSnake = [proPos];
     desenharSnake(corpoSnake);
   }
+}
+
+function criarComida() {
+  let posComida;
+
+  do {
+    let comidaX = Math.floor(Math.random() * divsPorLinha);
+    let comidaY = Math.floor(Math.random() * divsPorLinha);
+
+    posComida = listaDeDivs.find(
+      (element) =>
+        element.dataset.x === String(comidaX) &&
+        element.dataset.y === String(comidaY),
+    );
+  } while (corpoSnake.includes(posComida));
+
+  posComida.classList.add("food");
 }
