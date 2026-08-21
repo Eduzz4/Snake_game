@@ -60,3 +60,7 @@ header {
 .food {
   background-color:chartreuse;
 }
+
+.mensagem-endgame {
+  color: red;
+}

@@ -1,5 +1,6 @@
 const tabuleiro = document.querySelector(".tabuleiro-grid");
 const btnIniciar = document.querySelector(".iniciar-game");
+const endGameMessage = document.querySelector(".mensagem-endgame");
 
 let totalDeCasas = 144;
 let divsPorLinha = 12;
@@ -8,7 +9,7 @@ let corpoSnake = [];
 let direcaoAtual = null;
 let loopJogo = null;
 let jogoComecou = false;
-let posComida;
+let posComida = null;
 
 function criarTabuleiro() {
   for (let i = 0; i < totalDeCasas; i++) {
@@ -42,6 +43,7 @@ criarTabuleiro();
 btnIniciar.addEventListener("click", iniciarGame);
 
 function iniciarGame() {
+  endGameMessage.textContent = "";
   corpoSnake.forEach((e) => e.classList.remove("snake"));
   corpoSnake = [];
   direcaoAtual = null;
@@ -87,12 +89,16 @@ function movimentarSnake() {
       element.dataset.x === String(posX) && element.dataset.y === String(posY),
   );
 
+  if (corpoSnake.includes(proPos) || !proPos) {
+    gameOver();
+  }
+
   if (proPos) {
     corpoSnake.unshift(proPos);
     desenharSnake(corpoSnake);
-  } 
+  }
 
-  if(proPos === posComida) {
+  if (proPos === posComida) {
     posComida.classList.remove("food");
     criarComida();
   } else {
@@ -114,4 +120,14 @@ function criarComida() {
   } while (corpoSnake.includes(posComida));
 
   posComida.classList.add("food");
+}
+
+function gameOver() {
+  clearInterval(loopJogo);
+  jogoComecou = false;
+  corpoSnake.forEach((event) => event.classList.remove("snake"));
+  corpoSnake = [];
+  posComida.classList.remove("food");
+  posComida = null;
+  endGameMessage.textContent = "Game over, cique em iniciar para recomeçar!";
 }
